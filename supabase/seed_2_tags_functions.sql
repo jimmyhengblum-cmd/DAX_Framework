@@ -1,0 +1,31 @@
+INSERT INTO tags (id, name, slug) VALUES
+  ('b0000001-0000-0000-0000-000000000001', 'SUM',               'sum'),
+  ('b0000001-0000-0000-0000-000000000002', 'CALCULATE',         'calculate'),
+  ('b0000001-0000-0000-0000-000000000003', 'Time Intelligence', 'time-intelligence'),
+  ('b0000001-0000-0000-0000-000000000004', 'DIVIDE',            'divide'),
+  ('b0000001-0000-0000-0000-000000000005', 'FILTER',            'filter'),
+  ('b0000001-0000-0000-0000-000000000006', 'YTD',               'ytd'),
+  ('b0000001-0000-0000-0000-000000000007', 'MTD',               'mtd'),
+  ('b0000001-0000-0000-0000-000000000008', 'Ratio',             'ratio'),
+  ('b0000001-0000-0000-0000-000000000009', 'Ranking',           'ranking'),
+  ('b0000001-0000-0000-0000-000000000010', 'Running Total',     'running-total'),
+  ('b0000001-0000-0000-0000-000000000011', 'Budget',            'budget'),
+  ('b0000001-0000-0000-0000-000000000012', 'VAR',               'var'),
+  ('b0000001-0000-0000-0000-000000000013', 'ALL',               'all');
+
+INSERT INTO dax_functions (id, name, docs_url, category) VALUES
+  ('c0000001-0000-0000-0000-000000000001', 'SUM',                'https://learn.microsoft.com/dax/sum-function-dax',                'Aggregation'),
+  ('c0000001-0000-0000-0000-000000000002', 'CALCULATE',          'https://learn.microsoft.com/dax/calculate-function-dax',         'Filter'),
+  ('c0000001-0000-0000-0000-000000000003', 'DATESYTD',           'https://learn.microsoft.com/dax/datesytd-function-dax',          'Time Intelligence'),
+  ('c0000001-0000-0000-0000-000000000004', 'DATESMTD',           'https://learn.microsoft.com/dax/datesmtd-function-dax',          'Time Intelligence'),
+  ('c0000001-0000-0000-0000-000000000005', 'SAMEPERIODLASTYEAR', 'https://learn.microsoft.com/dax/sameperiodlastyear-function-dax','Time Intelligence'),
+  ('c0000001-0000-0000-0000-000000000006', 'DIVIDE',             'https://learn.microsoft.com/dax/divide-function-dax',            'Math'),
+  ('c0000001-0000-0000-0000-000000000007', 'ALL',                'https://learn.microsoft.com/dax/all-function-dax',               'Filter'),
+  ('c0000001-0000-0000-0000-000000000008', 'ALLEXCEPT',          'https://learn.microsoft.com/dax/allexcept-function-dax',         'Filter'),
+  ('c0000001-0000-0000-0000-000000000009', 'RANKX',              'https://learn.microsoft.com/dax/rankx-function-dax',             'Statistical'),
+  ('c0000001-0000-0000-0000-000000000010', 'FILTER',             'https://learn.microsoft.com/dax/filter-function-dax',            'Filter'),
+  ('c0000001-0000-0000-0000-000000000011', 'SUMX',               'https://learn.microsoft.com/dax/sumx-function-dax',              'Aggregation'),
+  ('c0000001-0000-0000-0000-000000000012', 'DISTINCTCOUNT',      'https://learn.microsoft.com/dax/distinctcount-function-dax',     'Aggregation'),
+  ('c0000001-0000-0000-0000-000000000013', 'IF',                 'https://learn.microsoft.com/dax/if-function-dax',                'Logical'),
+  ('c0000001-0000-0000-0000-000000000014', 'MAX',                'https://learn.microsoft.com/dax/max-function-dax',               'Aggregation'),
+  ('c0000001-0000-0000-0000-000000000015', 'VAR',                'https://learn.microsoft.com/dax/var-dax',                        'Other');
