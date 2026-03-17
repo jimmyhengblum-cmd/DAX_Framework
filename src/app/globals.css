@@ -2,27 +2,28 @@
 @tailwind components;
 @tailwind utilities;
 
-/* DAX Syntax Highlighting */
+/* ── DAX Syntax Highlighting ──────────────────────────── */
 .dax-code {
   font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', 'Consolas', monospace;
-  font-size: 0.875rem;
-  line-height: 1.7;
+  font-size: 0.8125rem;
+  line-height: 1.8;
 }
 
-.dax-keyword  { color: #c792ea; font-weight: 600; }
-.dax-function { color: #82aaff; }
-.dax-string   { color: #c3e88d; }
-.dax-comment  { color: #546e7a; font-style: italic; }
-.dax-table    { color: #ffcb6b; }
-.dax-column   { color: #f78c6c; }
-.dax-number   { color: #f07178; }
-.dax-operator { color: #89ddff; }
+.dax-keyword     { color: #a78bfa; font-weight: 600; }   /* VAR, RETURN → violet */
+.dax-function    { color: #60a5fa; }                     /* CALCULATE, SUM → bleu */
+.dax-table       { color: #fbbf24; }                     /* Table → ambre */
+.dax-column      { color: #f87171; }                     /* Colonne → rouge clair */
+.dax-string      { color: #86efac; }                     /* "string" → vert */
+.dax-comment     { color: #4b5563; font-style: italic; }
+.dax-number      { color: #fb923c; }                     /* 123 → orange */
+.dax-operator    { color: #94a3b8; }
+.dax-placeholder { color: #818cf8; font-style: italic; } /* <param> → indigo */
 
-/* Scrollbar */
-::-webkit-scrollbar       { width: 6px; height: 6px; }
-::-webkit-scrollbar-track { background: #1a1a2e; }
-::-webkit-scrollbar-thumb { background: #374151; border-radius: 3px; }
+/* ── Scrollbar ────────────────────────────────────────── */
+::-webkit-scrollbar       { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #374151; border-radius: 99px; }
 ::-webkit-scrollbar-thumb:hover { background: #4b5563; }
 
-/* Focus ring */
+/* ── Focus ring ───────────────────────────────────────── */
 :focus-visible { outline: 2px solid #3b82f6; outline-offset: 2px; }
