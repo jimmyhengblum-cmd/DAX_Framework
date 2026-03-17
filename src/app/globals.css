@@ -2,13 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
-/* ── Google Fonts ─────────────────────────────────────── */
 @import url('https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400;1,600&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap');
 
-/* ── DATATORII Design Tokens ──────────────────────────── */
+/* ── DATATORII Tokens ─────────────────────────────────── */
 :root {
   /* Backgrounds */
-  --bg:           #FFFFFF;
+  --bg:           #FAFAF8;
   --bg-warm:      #F5F3EE;
   --bg-neutral:   #EAEAEA;
   --bg-panel:     #FFFFFF;
@@ -27,26 +26,33 @@
   --fg-mid:       #686868;
   --fg-soft:      #A4A4A4;
 
-  /* Accents — Teal primary */
+  /* Brand — logo red */
+  --brand:        #FF5252;
+  --brand-light:  #FFE8E8;
+  --brand-mid:    #FF8A80;
+
+  /* Teal — primary data accent */
   --teal:         #4ABAAD;
   --teal-light:   #92D6CE;
   --teal-xlight:  #E4F5F3;
   --teal-dark:    #2E8A80;
 
-  /* Accents — Coral secondary */
+  /* Coral — secondary accent */
   --coral:        #D67145;
   --coral-light:  #E6AA8F;
   --coral-xlight: #FAECE7;
 
   /* Sentiment */
-  --good:         #7EAD87;
-  --neutral-sent: #000000;
-  --bad:          #DE8076;
+  --good:         #748678;
+  --bad:          #B14B4B;
 
-  /* Panels */
+  /* Layout */
   --radius-panel: 14px;
   --radius-inner: 8px;
   --border:       0.5px solid var(--line);
+
+  /* Nav */
+  --nav-height:   52px;
 }
 
 .dark {
@@ -66,17 +72,12 @@
   --fg-mid:       #A4A4A4;
   --fg-soft:      #686868;
 
-  --teal:         #4ABAAD;
-  --teal-light:   #2E8A80;
+  --brand-light:  #3A1A1A;
+
   --teal-xlight:  #0F2E2B;
   --teal-dark:    #92D6CE;
 
-  --coral:        #D67145;
-  --coral-light:  #A8532E;
   --coral-xlight: #2A1608;
-
-  --good:         #4A7D54;
-  --bad:          #8B4A44;
 }
 
 /* ── Base ─────────────────────────────────────────────── */
@@ -86,20 +87,14 @@ html {
   font-family: 'Inter', system-ui, sans-serif;
   background-color: var(--bg);
   color: var(--tx-label);
-  transition: background-color 0.2s ease, color 0.2s ease;
+  transition: background-color 0.25s ease, color 0.25s ease;
 }
 
 body { min-height: 100vh; }
 
-/* ── Typography helpers ───────────────────────────────── */
-.font-serif  { font-family: 'Crimson Text', Georgia, serif; }
-.tx-title    { color: var(--tx-title); }
-.tx-label    { color: var(--tx-label); }
-.tx-light    { color: var(--tx-light); }
-
 /* ── DAX Syntax Highlighting ──────────────────────────── */
 .dax-code {
-  font-family: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
+  font-family: 'JetBrains Mono', Consolas, monospace;
   font-size: 0.8125rem;
   line-height: 1.85;
 }
@@ -107,17 +102,10 @@ body { min-height: 100vh; }
 .dax-function    { color: #4ABAAD; }
 .dax-table       { color: #D67145; }
 .dax-column      { color: #72A1D7; }
-.dax-string      { color: #7EAD87; }
+.dax-string      { color: #748678; }
 .dax-comment     { color: var(--fg-soft); font-style: italic; }
 .dax-number      { color: #E6D77F; }
 .dax-placeholder { color: var(--coral); font-style: italic; }
-
-/* ── Divider ──────────────────────────────────────────── */
-.datatorii-divider {
-  border: none;
-  border-top: 0.5px solid var(--line);
-  margin: 0;
-}
 
 /* ── Scrollbar ────────────────────────────────────────── */
 ::-webkit-scrollbar       { width: 4px; height: 4px; }
