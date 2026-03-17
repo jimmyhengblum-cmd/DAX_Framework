@@ -1,16 +1,16 @@
 import type { Difficulty } from '@/types'
-import clsx from 'clsx'
 
-const config: Record<Difficulty, { label: string; className: string }> = {
-  beginner:     { label: 'Débutant',      className: 'bg-green-950 text-green-400 border-green-800' },
-  intermediate: { label: 'Intermédiaire', className: 'bg-yellow-950 text-yellow-500 border-yellow-800' },
-  advanced:     { label: 'Avancé',        className: 'bg-red-950 text-red-400 border-red-800' },
+const config: Record<Difficulty, { label: string; bg: string; color: string }> = {
+  beginner:     { label: 'Débutant',      bg: 'var(--teal-xlight)',   color: 'var(--teal-dark)' },
+  intermediate: { label: 'Intermédiaire', bg: 'rgba(230,215,127,0.2)', color: '#9A8B30' },
+  advanced:     { label: 'Avancé',        bg: 'var(--coral-xlight)',  color: 'var(--coral)' },
 }
 
 export function DifficultyBadge({ difficulty }: { difficulty: Difficulty }) {
-  const { label, className } = config[difficulty]
+  const { label, bg, color } = config[difficulty]
   return (
-    <span className={clsx('inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-medium', className)}>
+    <span className="inline-flex items-center rounded-full text-xs font-medium px-2.5 py-0.5"
+      style={{ backgroundColor: bg, color }}>
       {label}
     </span>
   )

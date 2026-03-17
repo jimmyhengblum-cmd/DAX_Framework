@@ -1,39 +1,37 @@
-import type { ExampleTable as ExampleTableType } from '@/types'
+import type { ExampleTable as T } from '@/types'
 
-export function ExampleTable({ data }: { data: ExampleTableType }) {
+export function ExampleTable({ data }: { data: T }) {
   return (
-    <div className="overflow-x-auto rounded-xl border border-gray-700">
-      <table className="w-full text-sm">
+    <div className="overflow-x-auto" style={{ border: '0.5px solid var(--line)', borderRadius: 'var(--radius-inner)' }}>
+      <table className="w-full text-xs font-mono">
         <thead>
-          <tr className="border-b border-gray-700 bg-gray-900">
+          <tr style={{ borderBottom: '0.5px solid var(--line)', background: 'var(--bg-panel)' }}>
             {data.headers.map((h, i) => (
-              <th key={i} className="px-4 py-2.5 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th key={i} className="px-4 py-2.5 text-left font-medium tracking-wider uppercase"
+                style={{ color: 'var(--tx-light)', fontSize: '10px' }}>
                 {h}
               </th>
             ))}
           </tr>
         </thead>
-        <tbody className="bg-gray-900/50">
+        <tbody style={{ background: 'var(--bg-warm)' }}>
           {data.rows.map((row, ri) => {
             const isHighlighted = data.highlight_last && ri === data.rows.length - 1
             const isEmpty = row.every(c => c === '')
             if (isEmpty) return (
-              <tr key={ri} className="border-b border-gray-800/50">
+              <tr key={ri} style={{ borderBottom: '0.5px solid var(--line)' }}>
                 {row.map((_, ci) => <td key={ci} className="px-4 py-1" />)}
               </tr>
             )
             return (
-              <tr
-                key={ri}
-                className={`border-b border-gray-800/50 last:border-0 transition-colors
-                  ${isHighlighted ? 'bg-blue-950/40' : 'hover:bg-gray-800/40'}`}
-              >
+              <tr key={ri}
+                style={{
+                  borderBottom: ri < data.rows.length - 1 ? '0.5px solid var(--line)' : 'none',
+                  background: isHighlighted ? 'var(--teal-xlight)' : 'transparent',
+                }}>
                 {row.map((cell, ci) => (
-                  <td
-                    key={ci}
-                    className={`px-4 py-2.5 font-mono text-xs
-                      ${isHighlighted ? 'text-blue-300 font-medium' : 'text-gray-300'}`}
-                  >
+                  <td key={ci} className="px-4 py-2.5"
+                    style={{ color: isHighlighted ? 'var(--teal)' : 'var(--tx-label)', fontWeight: isHighlighted ? '500' : '400' }}>
                     {cell}
                   </td>
                 ))}

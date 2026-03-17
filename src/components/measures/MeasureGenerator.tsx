@@ -5,15 +5,15 @@ import { Copy, Check, Zap } from 'lucide-react'
 import type { Parameter } from '@/types'
 import { incrementCopyCount } from '@/lib/data'
 
-interface MeasureGeneratorProps {
+interface Props {
   measureId: string
   parameters: Parameter[]
   scriptTemplate: string
 }
 
-export function MeasureGenerator({ measureId, parameters, scriptTemplate }: MeasureGeneratorProps) {
+export function MeasureGenerator({ measureId, parameters, scriptTemplate }: Props) {
   const [values, setValues] = useState<Record<string, string>>(
-    Object.fromEntries(parameters.map((p) => [p.key, '']))
+    Object.fromEntries(parameters.map(p => [p.key, '']))
   )
   const [copied, setCopied] = useState(false)
 
@@ -22,9 +22,7 @@ export function MeasureGenerator({ measureId, parameters, scriptTemplate }: Meas
     return script.replace(new RegExp(`<${param.key}>`, 'g'), val)
   }, scriptTemplate)
 
-  const isFilled = parameters
-    .filter((p) => p.required)
-    .every((p) => values[p.key]?.trim())
+  const isFilled = parameters.filter(p => p.required).every(p => values[p.key]?.trim())
 
   const handleCopy = async () => {
     await navigator.clipboard.writeText(generated)
@@ -34,41 +32,59 @@ export function MeasureGenerator({ measureId, parameters, scriptTemplate }: Meas
   }
 
   return (
-    <div className="rounded-xl border border-gray-700 bg-gray-900 overflow-hidden">
-
+    <div className="overflow-hidden" style={{
+      border: '0.5px solid var(--line)',
+      borderRadius: 'var(--radius-panel)',
+      background: 'var(--bg-panel)',
+    }}>
       {/* Header */}
-      <div className="flex items-center gap-2 px-4 py-3 border-b border-gray-700 bg-gray-800/60">
-        <Zap className="h-4 w-4 text-blue-400 shrink-0" />
-        <span className="text-sm font-medium text-white">Générateur de mesure</span>
-        <span className="ml-auto text-xs text-gray-500">Remplissez les paramètres ci-dessous</span>
+      <div className="flex items-center gap-2 px-5 py-3.5" style={{
+        borderBottom: '0.5px solid var(--line)',
+        background: 'var(--bg-warm)',
+      }}>
+        <Zap size={14} style={{ color: 'var(--teal)' }} />
+        <span className="font-serif text-base font-semibold" style={{ color: 'var(--tx-title)' }}>
+          Générateur de mesure
+        </span>
+        <span className="ml-auto text-xs" style={{ color: 'var(--tx-light)' }}>
+          Remplissez les paramètres ci-dessous
+        </span>
       </div>
 
       <div className="p-5 space-y-5">
-
-        {/* Parameters grid */}
+        {/* Parameters */}
         <div className="grid gap-4 sm:grid-cols-2">
-          {parameters.map((param) => (
+          {parameters.map(param => (
             <div key={param.key}>
-              <label className="block text-xs font-medium text-gray-400 mb-1">
+              <label className="block text-xs font-medium mb-1" style={{ color: 'var(--tx-label)' }}>
                 {param.label}
-                {param.required && <span className="text-red-500 ml-1">*</span>}
+                {param.required && <span style={{ color: 'var(--coral)' }} className="ml-1">*</span>}
               </label>
               <div className="relative">
-                <span className="absolute left-3 top-2 text-xs font-mono text-gray-600 pointer-events-none select-none">
+                <span className="absolute left-3 top-1.5 font-mono text-xs pointer-events-none select-none"
+                  style={{ color: 'var(--fg-soft)', fontSize: '10px' }}>
                   &lt;{param.key}&gt;
                 </span>
                 <input
                   type="text"
                   value={values[param.key]}
-                  onChange={(e) => setValues((v) => ({ ...v, [param.key]: e.target.value }))}
+                  onChange={e => setValues(v => ({ ...v, [param.key]: e.target.value }))}
                   placeholder={param.placeholder ?? ''}
-                  className="w-full rounded-lg border border-gray-700 bg-gray-800 px-3 pt-6 pb-2
-                             text-white placeholder-gray-600 font-mono text-sm
-                             focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                  className="w-full font-mono text-sm outline-none transition-all"
+                  style={{
+                    background: 'var(--bg-warm)',
+                    border: '0.5px solid var(--line)',
+                    borderRadius: 'var(--radius-inner)',
+                    padding: '20px 12px 6px 12px',
+                    color: 'var(--tx-title)',
+                    fontFamily: '"JetBrains Mono", Consolas, monospace',
+                  }}
+                  onFocus={e => (e.target.style.borderColor = 'var(--teal)')}
+                  onBlur={e => (e.target.style.borderColor = 'var(--line)')}
                 />
               </div>
               {param.description && (
-                <p className="text-xs text-gray-600 mt-1">{param.description}</p>
+                <p className="text-xs mt-1" style={{ color: 'var(--tx-light)' }}>{param.description}</p>
               )}
             </div>
           ))}
@@ -77,36 +93,41 @@ export function MeasureGenerator({ measureId, parameters, scriptTemplate }: Meas
         {/* Result */}
         <div>
           <div className="flex items-center justify-between mb-2">
-            <span className="text-xs font-medium uppercase tracking-widest text-gray-500">
+            <span className="text-xs tracking-widest uppercase font-medium" style={{ color: 'var(--tx-light)' }}>
               Mesure générée
             </span>
             {!isFilled && (
-              <span className="text-xs text-yellow-600">
-                Remplissez les champs obligatoires (*)
+              <span className="text-xs" style={{ color: 'var(--coral)' }}>
+                Champs obligatoires (*) manquants
               </span>
             )}
           </div>
-
-          <div className="relative rounded-xl border border-gray-700 bg-gray-950 overflow-hidden">
-            <pre className={`dax-code p-4 text-sm overflow-x-auto pr-28 ${isFilled ? 'text-gray-100' : 'text-gray-600'}`}>
+          <div className="relative overflow-hidden" style={{
+            background: 'var(--bg-warm)',
+            border: `0.5px solid ${isFilled ? 'var(--teal)' : 'var(--line)'}`,
+            borderRadius: 'var(--radius-inner)',
+            transition: 'border-color 0.2s ease',
+          }}>
+            <pre className="dax-code p-4 pr-28 text-sm overflow-x-auto"
+              style={{ color: isFilled ? 'var(--tx-title)' : 'var(--tx-light)' }}>
               {generated}
             </pre>
             <button
               onClick={handleCopy}
               disabled={!isFilled}
-              className="absolute right-3 top-3 flex items-center gap-1.5 rounded-md px-3 py-1.5
-                         text-xs font-medium transition-all
-                         disabled:opacity-30 disabled:cursor-not-allowed
-                         bg-blue-600 hover:bg-blue-500 text-white"
+              className="absolute right-3 top-3 flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded transition-all"
+              style={{
+                background: isFilled ? 'var(--teal)' : 'var(--bg-neutral)',
+                color: isFilled ? '#fff' : 'var(--tx-light)',
+                border: 'none',
+                cursor: isFilled ? 'pointer' : 'not-allowed',
+                opacity: isFilled ? 1 : 0.5,
+              }}
             >
-              {copied
-                ? <><Check className="h-3.5 w-3.5" />Copié !</>
-                : <><Copy className="h-3.5 w-3.5" />Copier</>
-              }
+              {copied ? <><Check size={12} />Copié !</> : <><Copy size={12} />Copier</>}
             </button>
           </div>
         </div>
-
       </div>
     </div>
   )

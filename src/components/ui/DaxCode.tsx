@@ -2,7 +2,6 @@
 
 import { useState } from 'react'
 import { Copy, Check } from 'lucide-react'
-import clsx from 'clsx'
 
 const DAX_FUNCTIONS = [
   'CALCULATE','SUM','SUMX','AVERAGE','AVERAGEX','COUNT','COUNTA','COUNTX','COUNTROWS',
@@ -17,30 +16,18 @@ const DAX_FUNCTIONS = [
 ]
 
 function highlightDax(code: string): string {
-  let html = code
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-
-  // Comments
+  let html = code.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
   html = html.replace(/(--[^\n]*)/g, '<span class="dax-comment">$1</span>')
-  // Strings
   html = html.replace(/"([^"]*)"/g, '<span class="dax-string">"$1"</span>')
-  // Functions
-  const fnPattern = new RegExp(`\\b(${DAX_FUNCTIONS.join('|')})\\b(?=\\s*\\()`, 'gi')
-  html = html.replace(fnPattern, '<span class="dax-function">$1</span>')
-  // VAR / RETURN
+  const fnPat = new RegExp(`\\b(${DAX_FUNCTIONS.join('|')})\\b(?=\\s*\\()`, 'gi')
+  html = html.replace(fnPat, '<span class="dax-function">$1</span>')
   html = html.replace(/\b(VAR|RETURN)\b/g, '<span class="dax-keyword">$1</span>')
-  // Table[Column]
   html = html.replace(
     /([A-Za-z_][A-Za-z0-9_ ]*)\[([^\]]+)\]/g,
-    '<span class="dax-table">$1</span><span class="dax-operator">[</span><span class="dax-column">$2</span><span class="dax-operator">]</span>'
+    '<span class="dax-table">$1</span><span class="dax-placeholder">[</span><span class="dax-column">$2</span><span class="dax-placeholder">]</span>'
   )
-  // Template placeholders &lt;param&gt;
-  html = html.replace(/(&lt;[^&gt;]+&gt;)/g, '<span class="dax-placeholder">$1</span>')
-  // Numbers
+  html = html.replace(/(&lt;[^&]+&gt;)/g, '<span class="dax-placeholder">$1</span>')
   html = html.replace(/\b(\d+(\.\d+)?)\b/g, '<span class="dax-number">$1</span>')
-
   return html
 }
 
@@ -48,10 +35,9 @@ interface DaxCodeProps {
   code: string
   onCopy?: () => void
   label?: string
-  className?: string
 }
 
-export function DaxCode({ code, onCopy, label, className }: DaxCodeProps) {
+export function DaxCode({ code, onCopy, label }: DaxCodeProps) {
   const [copied, setCopied] = useState(false)
 
   const handleCopy = async () => {
@@ -62,23 +48,33 @@ export function DaxCode({ code, onCopy, label, className }: DaxCodeProps) {
   }
 
   return (
-    <div className={clsx('rounded-xl border border-gray-700 bg-gray-900 overflow-hidden', className)}>
-      {label && (
-        <div className="flex items-center justify-between border-b border-gray-700 px-4 py-2.5 bg-gray-900/80">
-          <span className="text-xs font-medium text-gray-500 uppercase tracking-wider">{label}</span>
-          <button
-            onClick={handleCopy}
-            className="flex items-center gap-1.5 rounded-md px-2.5 py-1 text-xs text-gray-400
-                       border border-gray-700 hover:bg-gray-700 hover:text-white transition-colors"
-          >
-            {copied
-              ? <><Check className="h-3 w-3 text-green-400" /><span className="text-green-400">Copié !</span></>
-              : <><Copy className="h-3 w-3" /><span>Copier</span></>
-            }
-          </button>
-        </div>
-      )}
-      <pre className="dax-code overflow-x-auto p-4 text-sm leading-relaxed">
+    <div className="overflow-hidden" style={{
+      border: '0.5px solid var(--line)',
+      borderRadius: 'var(--radius-inner)',
+      backgroundColor: 'var(--bg-warm)',
+    }}>
+      <div className="flex items-center justify-between px-4 py-2" style={{
+        borderBottom: '0.5px solid var(--line)',
+        backgroundColor: 'var(--bg-panel)',
+      }}>
+        <span className="font-mono text-xs tracking-widest" style={{ color: 'var(--tx-light)' }}>
+          {label ?? 'DAX'}
+        </span>
+        <button onClick={handleCopy}
+          className="flex items-center gap-1.5 text-xs px-2.5 py-1 rounded transition-all"
+          style={{
+            border: '0.5px solid var(--line)',
+            color: copied ? 'var(--teal)' : 'var(--tx-light)',
+            backgroundColor: 'transparent',
+          }}
+        >
+          {copied
+            ? <><Check size={11} /><span>Copié</span></>
+            : <><Copy size={11} /><span>Copier</span></>
+          }
+        </button>
+      </div>
+      <pre className="dax-code overflow-x-auto px-5 py-4 text-sm">
         <code dangerouslySetInnerHTML={{ __html: highlightDax(code) }} />
       </pre>
     </div>

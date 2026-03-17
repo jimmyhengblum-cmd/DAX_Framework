@@ -1,72 +1,74 @@
 import Link from 'next/link'
-import { Copy, Eye, ChevronRight } from 'lucide-react'
+import { Copy, Eye } from 'lucide-react'
 import type { Measure } from '@/types'
-import { DifficultyBadge } from '../ui/DifficultyBadge'
+import { DifficultyBadge } from '@/components/ui/DifficultyBadge'
 
-interface MeasureCardProps {
-  measure: Measure
-}
-
-export function MeasureCard({ measure }: MeasureCardProps) {
-  const categoryColor = measure.category_color ?? '#3B82F6'
-
+export function MeasureCard({ measure }: { measure: Measure }) {
   return (
-    <Link
-      href={`/measures/${measure.slug}`}
-      className="group block rounded-xl border border-gray-800 bg-gray-900 p-5
-                 hover:border-gray-600 hover:bg-gray-800/80 transition-all duration-200"
+    <Link href={`/measures/${measure.slug}`}
+      className="group block transition-all duration-200"
+      style={{
+        background: 'var(--bg-panel)',
+        border: '0.5px solid var(--line)',
+        borderRadius: 'var(--radius-panel)',
+        padding: '20px',
+      }}
+      onMouseEnter={e => {
+        const el = e.currentTarget as HTMLElement
+        el.style.borderColor = 'var(--teal)'
+        el.style.boxShadow = '0 0 0 1px var(--teal)'
+      }}
+      onMouseLeave={e => {
+        const el = e.currentTarget as HTMLElement
+        el.style.borderColor = 'var(--line)'
+        el.style.boxShadow = 'none'
+      }}
     >
-      {/* Header */}
-      <div className="flex items-start justify-between gap-3 mb-3">
-        <div className="flex items-center gap-2 min-w-0">
-          <span
-            className="mt-0.5 h-2 w-2 rounded-full shrink-0"
-            style={{ backgroundColor: categoryColor }}
-          />
-          <span className="text-xs text-gray-500 truncate">{measure.category_name}</span>
+      {/* Category + Difficulty */}
+      <div className="flex items-center justify-between mb-3">
+        <div className="flex items-center gap-1.5">
+          <span className="w-1.5 h-1.5 rounded-full"
+            style={{ backgroundColor: measure.category_color ?? 'var(--teal)' }} />
+          <span className="text-xs" style={{ color: 'var(--tx-light)' }}>
+            {measure.category_name}
+          </span>
         </div>
         <DifficultyBadge difficulty={measure.difficulty} />
       </div>
 
       {/* Name */}
-      <h3 className="font-semibold text-white group-hover:text-blue-400 transition-colors mb-2 flex items-center gap-1">
+      <h3 className="font-serif text-base font-semibold mb-2 transition-colors"
+        style={{ color: 'var(--tx-title)', lineHeight: '1.35' }}>
         {measure.name}
-        <ChevronRight className="h-4 w-4 opacity-0 group-hover:opacity-100 transition-opacity" />
       </h3>
 
       {/* Description */}
-      <p className="text-sm text-gray-400 line-clamp-2 mb-4">
+      <p className="text-xs leading-relaxed mb-4 line-clamp-2"
+        style={{ color: 'var(--tx-light)' }}>
         {measure.description}
       </p>
 
       {/* Script preview */}
-      <div className="rounded-md bg-gray-950 px-3 py-2 mb-4 border border-gray-800">
-        <code className="text-xs text-blue-300 font-mono line-clamp-1">
+      <div className="rounded px-3 py-2 mb-4 font-mono overflow-hidden"
+        style={{ background: 'var(--bg-warm)', border: '0.5px solid var(--line)' }}>
+        <code className="text-xs truncate block" style={{ color: 'var(--teal)' }}>
           {measure.script_template}
         </code>
       </div>
 
       {/* Footer */}
       <div className="flex items-center justify-between">
-        <div className="flex flex-wrap gap-1">
-          {measure.tags.slice(0, 3).map((tag) => (
-            <span
-              key={tag.slug}
-              className="rounded-full bg-gray-800 px-2 py-0.5 text-xs text-gray-400"
-            >
+        <div className="flex flex-wrap gap-1.5">
+          {measure.tags.slice(0, 3).map(tag => (
+            <span key={tag.slug} className="text-xs px-2 py-0.5 rounded-full"
+              style={{ background: 'var(--bg-neutral)', color: 'var(--tx-light)' }}>
               {tag.name}
             </span>
           ))}
         </div>
-        <div className="flex items-center gap-3 text-xs text-gray-600">
-          <span className="flex items-center gap-1">
-            <Eye className="h-3 w-3" />
-            {measure.view_count}
-          </span>
-          <span className="flex items-center gap-1">
-            <Copy className="h-3 w-3" />
-            {measure.copy_count}
-          </span>
+        <div className="flex items-center gap-3 text-xs" style={{ color: 'var(--line-strong)' }}>
+          <span className="flex items-center gap-1"><Eye size={11} />{measure.view_count}</span>
+          <span className="flex items-center gap-1"><Copy size={11} />{measure.copy_count}</span>
         </div>
       </div>
     </Link>

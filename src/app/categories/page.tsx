@@ -1,99 +1,68 @@
-import { Suspense } from 'react'
-import { getMeasures, getCategories } from '@/lib/data'
-import { MeasureCard } from '@/components/measures/MeasureCard'
-import { SearchBar } from '@/components/measures/SearchBar'
-import { CategoryFilter } from '@/components/measures/CategoryFilter'
-import { Database, Zap, BookOpen } from 'lucide-react'
+import Link from 'next/link'
+import { getCategories, getMeasures } from '@/lib/data'
+import { Sigma, Calendar, Percent, TrendingUp, Trophy, Banknote } from 'lucide-react'
+import type { ElementType } from 'react'
 
-interface HomeProps {
-  searchParams: { q?: string; category?: string; tag?: string }
+const ICONS: Record<string, ElementType> = {
+  sigma: Sigma, calendar: Calendar, percent: Percent,
+  'trending-up': TrendingUp, trophy: Trophy, banknote: Banknote,
 }
 
-export default async function HomePage({ searchParams }: HomeProps) {
-  const [measures, categories] = await Promise.all([
-    getMeasures({
-      search: searchParams.q,
-      categorySlug: searchParams.category,
-      tag: searchParams.tag,
-    }),
-    getCategories(),
-  ])
-
-  const isFiltered = !!(searchParams.q || searchParams.category || searchParams.tag)
+export default async function CategoriesPage() {
+  const [categories, measures] = await Promise.all([getCategories(), getMeasures()])
+  const countByCategory = measures.reduce<Record<string, number>>((acc, m) => {
+    acc[m.category_id] = (acc[m.category_id] ?? 0) + 1
+    return acc
+  }, {})
 
   return (
-    <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-10">
-
-      {/* Hero */}
-      {!isFiltered && (
-        <div className="mb-12 text-center">
-          <div className="inline-flex items-center gap-2 rounded-full border border-blue-800 bg-blue-900/30 px-3 py-1 text-sm text-blue-300 mb-5">
-            <Zap className="h-3.5 w-3.5" />
-            Bibliothèque DAX collaborative
-          </div>
-          <h1 className="text-4xl font-bold text-white mb-4">
-            Trouvez la bonne mesure DAX,<br />
-            <span className="text-blue-400">en quelques secondes.</span>
-          </h1>
-          <p className="text-lg text-gray-400 max-w-xl mx-auto">
-            Des patterns DAX documentés, testés et personnalisables pour vos rapports Power BI.
-          </p>
-
-          {/* Stats */}
-          <div className="mt-8 flex justify-center gap-10 text-sm">
-            <div className="text-center">
-              <p className="text-2xl font-bold text-white">{measures.length}</p>
-              <p className="text-gray-500">Mesures</p>
-            </div>
-            <div className="text-center">
-              <p className="text-2xl font-bold text-white">{categories.length}</p>
-              <p className="text-gray-500">Catégories</p>
-            </div>
-            <div className="text-center">
-              <p className="text-2xl font-bold text-white">
-                {measures.reduce((s, m) => s + m.copy_count, 0)}
-              </p>
-              <p className="text-gray-500">Copies</p>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Search */}
-      <div className="mb-6">
-        <SearchBar defaultValue={searchParams.q} />
-      </div>
-
-      {/* Category Filter */}
-      <div className="mb-8">
-        <CategoryFilter
-          categories={categories}
-          selected={searchParams.category}
-        />
-      </div>
-
-      {/* Results */}
-      {isFiltered && (
-        <p className="text-sm text-gray-500 mb-4">
-          {measures.length} mesure{measures.length !== 1 ? 's' : ''} trouvée{measures.length !== 1 ? 's' : ''}
-          {searchParams.q && <> pour « <span className="text-gray-300">{searchParams.q}</span> »</>}
-          {searchParams.category && <> dans <span className="text-gray-300">{searchParams.category}</span></>}
+    <div className="mx-auto max-w-5xl px-6 py-12">
+      <div className="mb-10">
+        <p className="text-xs font-medium tracking-widest uppercase mb-3" style={{ color: 'var(--teal)' }}>
+          Navigation
         </p>
-      )}
+        <h1 className="font-serif font-semibold mb-2" style={{ fontSize: '32px', color: 'var(--tx-title)' }}>
+          Catégories
+        </h1>
+        <p className="text-sm" style={{ color: 'var(--tx-light)' }}>
+          Parcourez les mesures DAX par domaine fonctionnel.
+        </p>
+      </div>
 
-      {measures.length === 0 ? (
-        <div className="py-20 text-center text-gray-500">
-          <BookOpen className="h-10 w-10 mx-auto mb-3 opacity-40" />
-          <p className="font-medium">Aucune mesure trouvée</p>
-          <p className="text-sm mt-1">Essayez d'autres mots-clés ou supprimez les filtres.</p>
-        </div>
-      ) : (
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {measures.map((measure) => (
-            <MeasureCard key={measure.id} measure={measure} />
-          ))}
-        </div>
-      )}
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {categories.map(cat => {
+          const Icon = ICONS[cat.icon ?? ''] ?? Sigma
+          const count = countByCategory[cat.id] ?? 0
+          return (
+            <Link key={cat.slug} href={`/?category=${cat.slug}`}
+              className="group block p-5 transition-all duration-200"
+              style={{ background: 'var(--bg-panel)', border: '0.5px solid var(--line)', borderRadius: 'var(--radius-panel)' }}
+              onMouseEnter={(e: React.MouseEvent<HTMLAnchorElement>) => {
+                (e.currentTarget as HTMLElement).style.borderColor = cat.color ?? 'var(--teal)'
+              }}
+              onMouseLeave={(e: React.MouseEvent<HTMLAnchorElement>) => {
+                (e.currentTarget as HTMLElement).style.borderColor = 'var(--line)'
+              }}>
+              <div className="inline-flex rounded p-2 mb-4"
+                style={{ background: `${cat.color ?? '#4ABAAD'}18`, borderRadius: 'var(--radius-inner)' }}>
+                <Icon size={16} style={{ color: cat.color ?? 'var(--teal)' }} />
+              </div>
+              <h2 className="font-serif font-semibold text-base mb-1"
+                style={{ color: 'var(--tx-title)' }}>
+                {cat.name}
+              </h2>
+              {cat.description && (
+                <p className="text-xs leading-relaxed mb-3" style={{ color: 'var(--tx-light)' }}>
+                  {cat.description}
+                </p>
+              )}
+              <span className="text-xs" style={{ color: 'var(--tx-light)' }}>
+                {count} mesure{count !== 1 ? 's' : ''}
+              </span>
+            </Link>
+          )
+        })}
+      </div>
     </div>
   )
 }

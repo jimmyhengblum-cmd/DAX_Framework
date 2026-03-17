@@ -1,9 +1,6 @@
 import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
 import './globals.css'
 import { Header } from '@/components/ui/Header'
-
-const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
   title: 'DAX Framework — Bibliothèque de mesures Power BI',
@@ -13,11 +10,24 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="fr">
-      <body className={`${inter.className} bg-gray-950 text-gray-100 min-h-screen`}>
+      <body className="min-h-screen" style={{ backgroundColor: 'var(--bg)', color: 'var(--tx-label)' }}>
         <Header />
         <main>{children}</main>
-        <footer className="border-t border-gray-800 mt-20 py-8 text-center text-gray-500 text-sm">
-          DAX Framework · Bibliothèque collaborative de mesures Power BI
+        <footer style={{ borderTop: '0.5px solid var(--line)' }} className="mt-24 py-10">
+          <div className="mx-auto max-w-7xl px-6 flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <span className="font-serif text-base font-semibold" style={{ color: 'var(--tx-title)' }}>
+                DAX Framework
+              </span>
+              <span className="text-xs px-2 py-0.5 rounded-full"
+                style={{ background: 'var(--teal-xlight)', color: 'var(--teal)' }}>
+                Beta
+              </span>
+            </div>
+            <p className="text-xs" style={{ color: 'var(--tx-light)' }}>
+              Bibliothèque collaborative de mesures Power BI
+            </p>
+          </div>
         </footer>
       </body>
     </html>

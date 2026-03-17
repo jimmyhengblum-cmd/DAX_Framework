@@ -2,28 +2,130 @@
 @tailwind components;
 @tailwind utilities;
 
-/* ── DAX Syntax Highlighting ──────────────────────────── */
-.dax-code {
-  font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', 'Consolas', monospace;
-  font-size: 0.8125rem;
-  line-height: 1.8;
+/* ── Google Fonts ─────────────────────────────────────── */
+@import url('https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400;1,600&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap');
+
+/* ── DATATORII Design Tokens ──────────────────────────── */
+:root {
+  /* Backgrounds */
+  --bg:           #FFFFFF;
+  --bg-warm:      #F5F3EE;
+  --bg-neutral:   #EAEAEA;
+  --bg-panel:     #FFFFFF;
+
+  /* Text */
+  --tx-title:     #181818;
+  --tx-label:     #4A4A4A;
+  --tx-light:     #868686;
+
+  /* Lines */
+  --line:         #C5C3C2;
+  --line-strong:  #A4A4A4;
+
+  /* Foreground */
+  --fg:           #2C2C2C;
+  --fg-mid:       #686868;
+  --fg-soft:      #A4A4A4;
+
+  /* Accents — Teal primary */
+  --teal:         #4ABAAD;
+  --teal-light:   #92D6CE;
+  --teal-xlight:  #E4F5F3;
+  --teal-dark:    #2E8A80;
+
+  /* Accents — Coral secondary */
+  --coral:        #D67145;
+  --coral-light:  #E6AA8F;
+  --coral-xlight: #FAECE7;
+
+  /* Sentiment */
+  --good:         #7EAD87;
+  --neutral-sent: #000000;
+  --bad:          #DE8076;
+
+  /* Panels */
+  --radius-panel: 14px;
+  --radius-inner: 8px;
+  --border:       0.5px solid var(--line);
 }
 
-.dax-keyword     { color: #a78bfa; font-weight: 600; }   /* VAR, RETURN → violet */
-.dax-function    { color: #60a5fa; }                     /* CALCULATE, SUM → bleu */
-.dax-table       { color: #fbbf24; }                     /* Table → ambre */
-.dax-column      { color: #f87171; }                     /* Colonne → rouge clair */
-.dax-string      { color: #86efac; }                     /* "string" → vert */
-.dax-comment     { color: #4b5563; font-style: italic; }
-.dax-number      { color: #fb923c; }                     /* 123 → orange */
-.dax-operator    { color: #94a3b8; }
-.dax-placeholder { color: #818cf8; font-style: italic; } /* <param> → indigo */
+.dark {
+  --bg:           #181818;
+  --bg-warm:      #1E1E1B;
+  --bg-neutral:   #2C2C2C;
+  --bg-panel:     #222220;
+
+  --tx-title:     #E8E6E0;
+  --tx-label:     #B0ADA6;
+  --tx-light:     #686868;
+
+  --line:         #303030;
+  --line-strong:  #404040;
+
+  --fg:           #E0E0E0;
+  --fg-mid:       #A4A4A4;
+  --fg-soft:      #686868;
+
+  --teal:         #4ABAAD;
+  --teal-light:   #2E8A80;
+  --teal-xlight:  #0F2E2B;
+  --teal-dark:    #92D6CE;
+
+  --coral:        #D67145;
+  --coral-light:  #A8532E;
+  --coral-xlight: #2A1608;
+
+  --good:         #4A7D54;
+  --bad:          #8B4A44;
+}
+
+/* ── Base ─────────────────────────────────────────────── */
+* { box-sizing: border-box; }
+
+html {
+  font-family: 'Inter', system-ui, sans-serif;
+  background-color: var(--bg);
+  color: var(--tx-label);
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+body { min-height: 100vh; }
+
+/* ── Typography helpers ───────────────────────────────── */
+.font-serif  { font-family: 'Crimson Text', Georgia, serif; }
+.tx-title    { color: var(--tx-title); }
+.tx-label    { color: var(--tx-label); }
+.tx-light    { color: var(--tx-light); }
+
+/* ── DAX Syntax Highlighting ──────────────────────────── */
+.dax-code {
+  font-family: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
+  font-size: 0.8125rem;
+  line-height: 1.85;
+}
+.dax-keyword     { color: #D492DD; font-weight: 500; }
+.dax-function    { color: #4ABAAD; }
+.dax-table       { color: #D67145; }
+.dax-column      { color: #72A1D7; }
+.dax-string      { color: #7EAD87; }
+.dax-comment     { color: var(--fg-soft); font-style: italic; }
+.dax-number      { color: #E6D77F; }
+.dax-placeholder { color: var(--coral); font-style: italic; }
+
+/* ── Divider ──────────────────────────────────────────── */
+.datatorii-divider {
+  border: none;
+  border-top: 0.5px solid var(--line);
+  margin: 0;
+}
 
 /* ── Scrollbar ────────────────────────────────────────── */
-::-webkit-scrollbar       { width: 5px; height: 5px; }
+::-webkit-scrollbar       { width: 4px; height: 4px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: #374151; border-radius: 99px; }
-::-webkit-scrollbar-thumb:hover { background: #4b5563; }
+::-webkit-scrollbar-thumb { background: var(--line-strong); border-radius: 99px; }
 
-/* ── Focus ring ───────────────────────────────────────── */
-:focus-visible { outline: 2px solid #3b82f6; outline-offset: 2px; }
+/* ── Focus ────────────────────────────────────────────── */
+:focus-visible { outline: 1.5px solid var(--teal); outline-offset: 2px; }
+
+/* ── Selection ────────────────────────────────────────── */
+::selection { background: var(--teal-xlight); color: var(--teal-dark); }
