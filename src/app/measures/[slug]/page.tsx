@@ -58,6 +58,17 @@ export default async function MeasurePage({ params }: Props) {
           <DaxCode code={measure.script_template} label="TEMPLATE" />
         </section>
 
+        {/* Generator — juste sous le template */}
+        {measure.parameters.length > 0 && (
+          <section>
+            <MeasureGenerator
+              measureId={measure.id}
+              parameters={measure.parameters}
+              scriptTemplate={measure.script_template}
+            />
+          </section>
+        )}
+
         {/* Script Example */}
         <section>
           <p className="text-xs font-medium uppercase tracking-widest text-gray-500 mb-3">Exemple concret</p>
@@ -121,17 +132,6 @@ export default async function MeasurePage({ params }: Props) {
                 </Link>
               ))}
             </div>
-          </section>
-        )}
-
-        {/* Generator */}
-        {measure.parameters.length > 0 && (
-          <section>
-            <MeasureGenerator
-              measureId={measure.id}
-              parameters={measure.parameters}
-              scriptTemplate={measure.script_template}
-            />
           </section>
         )}
 
