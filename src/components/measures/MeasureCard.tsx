@@ -1,3 +1,5 @@
+'use client'
+
 import Link from 'next/link'
 import { Copy, Eye } from 'lucide-react'
 import type { Measure } from '@/types'
