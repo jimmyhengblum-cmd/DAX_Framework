@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { Copy, Eye, ChevronRight } from 'lucide-react'
 import type { Measure } from '@/types'
-import { DifficultyBadge } from './DifficultyBadge'
+import { DifficultyBadge } from '../ui/DifficultyBadge'
 
 interface MeasureCardProps {
   measure: Measure
